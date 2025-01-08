@@ -61,11 +61,11 @@ jsPsych.init({
     }
 });
 
-function save_data(experiment, version, identifier, data) {
+function saveData(experiment, version, identifier, data) {
   $.ajax({
     type: 'POST',
     cache: false,
-    url: '/save-data', 
+    url: 'http://localhost:3001/save-data', 
     contentType: 'application/json', 
     data: JSON.stringify({
       experiment: experiment,

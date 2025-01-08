@@ -1,7 +1,7 @@
 import {connectToDb} from './db.js';
 import express from 'express';
 import cors from 'cors';
-import express from 'express';
+import mongoose from 'mongoose';
 
 const app = express();
 app.use(cors());

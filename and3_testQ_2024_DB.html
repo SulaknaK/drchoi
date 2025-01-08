@@ -1,0 +1,88 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	<script src="js/jquery.min.js"></script>
+	<script src="js/jquery-ui.min.js"></script>
+  <script src="js/snap.svg-min.js"></script>
+	<script src="js/papaparse.min.js"></script>
+  <script src="js/jspsych.js"></script>
+
+
+  <script src="jspsych-and-test_trial8.js"></script>
+  <script src="jspsych-and-test_trial9.js"></script>
+
+
+  <link rel="stylesheet" href="css/jspsych.css"></link>
+  <link rel="stylesheet" href="css/activeTouch.css"></link>
+</head>
+
+<body>
+  <div id="jspsych-target"></div>
+</body>
+
+
+<script>
+
+//$('body,html').addClass('stop-scrolling');
+$('body,html').addClass('stop-scrolling');
+//$('body').bind('touchmove', function(e){e.preventDefault()})
+
+var subject_id = prompt("Enter subject id");
+var timeline = [];
+
+jsPsych.data.addProperties({
+	subject: subject_id,
+	//list: listNum
+});
+
+timeline.push({
+	type: 'and-test_trial8',
+	timing_post_trial: 1000,
+	data: {trialNum: 8, trialType: "test", stimSet: 1},
+});
+
+timeline.push({
+	type: 'and-test_trial9',
+	timing_post_trial: 1000,
+	data: {trialNum: 9, trialType: "test", stimSet: 1},
+});
+
+jsPsych.init({
+  display_element: $('#jspsych-target'),
+  timeline: timeline,
+  fullscreen: true,
+  default_iti: 0,
+  on_finish: function(){
+    jsPsych.data.displayData();
+    jsPsych.data.localSave("AND_Local_"+subject_id+".csv","csv")
+    saveData("AND_Local_"+subject_id+".csv", jsPsych.data.dataAsCSV());
+    }
+});
+
+function save_data(experiment, version, identifier, data) {
+  $.ajax({
+    type: 'POST',
+    cache: false,
+    url: '/save-data', 
+    contentType: 'application/json', 
+    data: JSON.stringify({
+      experiment: experiment,
+      version: version,
+      identifier: identifier,
+      data: data
+    }),
+    success: function (response) {
+      console.log('Data saved:', response);
+    },
+    error: function (error) {
+      console.error('Error saving data:', error);
+    }
+  });
+}
+
+
+</script>
+
+</html>
